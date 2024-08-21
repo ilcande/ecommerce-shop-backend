@@ -42,6 +42,7 @@ group :development, :test do
   gem 'shoulda-matchers'
   gem 'database_cleaner-active_record'
   gem 'capybara'
+  gem 'faker'
   gem "debug", platforms: %i[ mri mswin mswin64 mingw x64_mingw ]
 end
 
