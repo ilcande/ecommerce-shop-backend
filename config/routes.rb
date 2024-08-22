@@ -14,7 +14,7 @@ Rails.application.routes.draw do
 
   # Part routes
   resources :parts do
-    resources :options, only: [:index, :create]
+    resources :options, only: [:index, :create, :show, :update, :destroy]
     resources :constraints, only: [:index, :create]
   end
 

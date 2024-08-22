@@ -18,7 +18,7 @@ class ConstraintsController < ApplicationController
     if @constraint.save
       render json: @constraint, status: :created
     else
-      render json: @constraint.errors, status: :unprocessable_entity
+      render json: { errors: @constraint.errors.as_json }, status: :unprocessable_entity
     end
   end
 
@@ -27,13 +27,14 @@ class ConstraintsController < ApplicationController
     if @constraint.update(constraint_params)
       render json: @constraint
     else
-      render json: @constraint.errors, status: :unprocessable_entity
+      render json: { errors: @constraint.errors.as_json }, status: :unprocessable_entity
     end
   end
 
   # DELETE /constraints/:id
   def destroy
     @constraint.destroy
+    head :no_content
   end
 
   private
