@@ -43,6 +43,7 @@ group :development, :test do
   gem 'database_cleaner-active_record'
   gem 'capybara'
   gem 'faker'
+  gem 'pry-byebug'
   gem "debug", platforms: %i[ mri mswin mswin64 mingw x64_mingw ]
 end
 
