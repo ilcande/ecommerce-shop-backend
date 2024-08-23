@@ -91,6 +91,29 @@ eight_speed_chain = Option.create!(
 
 puts "Created Options."
 
+# Create Product Configurations
+ProductConfiguration.create!(product: bike, option: full_suspension)
+ProductConfiguration.create!(product: bike, option: diamond)
+ProductConfiguration.create!(product: bike, option: matte)
+ProductConfiguration.create!(product: bike, option: shiny)
+ProductConfiguration.create!(product: bike, option: road_wheels)
+ProductConfiguration.create!(product: bike, option: mountain_wheels)
+ProductConfiguration.create!(product: bike, option: fat_bike_wheels)
+ProductConfiguration.create!(product: bike, option: single_speed_chain)
+ProductConfiguration.create!(product: bike, option: eight_speed_chain)
+
+ProductConfiguration.create!(product: road_bike, option: full_suspension)
+ProductConfiguration.create!(product: road_bike, option: diamond)
+ProductConfiguration.create!(product: road_bike, option: matte)
+ProductConfiguration.create!(product: road_bike, option: shiny)
+ProductConfiguration.create!(product: road_bike, option: road_wheels)
+ProductConfiguration.create!(product: road_bike, option: mountain_wheels)
+ProductConfiguration.create!(product: road_bike, option: fat_bike_wheels)
+ProductConfiguration.create!(product: road_bike, option: single_speed_chain)
+ProductConfiguration.create!(product: road_bike, option: eight_speed_chain)
+
+puts "Created Product Configurations."
+
 # Create Stock Levels
 StockLevel.create!(option: full_suspension, quantity: 10)
 StockLevel.create!(option: diamond, quantity: 10)
