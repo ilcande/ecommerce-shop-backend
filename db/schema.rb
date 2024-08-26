@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_08_22_163534) do
+ActiveRecord::Schema[7.1].define(version: 2024_08_24_133753) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -29,8 +29,10 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_22_163534) do
     t.bigint "constraint_option_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "option_id", null: false
     t.index ["constraint_option_id"], name: "index_constraints_on_constraint_option_id"
     t.index ["constraint_part_id"], name: "index_constraints_on_constraint_part_id"
+    t.index ["option_id"], name: "index_constraints_on_option_id"
     t.index ["part_id"], name: "index_constraints_on_part_id"
   end
 
@@ -97,6 +99,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_22_163534) do
   end
 
   add_foreign_key "cart_items", "products"
+  add_foreign_key "constraints", "options"
   add_foreign_key "constraints", "options", column: "constraint_option_id"
   add_foreign_key "constraints", "parts"
   add_foreign_key "constraints", "parts", column: "constraint_part_id"

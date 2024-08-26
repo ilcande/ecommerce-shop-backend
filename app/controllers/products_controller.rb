@@ -18,7 +18,7 @@ class ProductsController < ApplicationController
     render json: @product.to_json(include: {
       options: {
         include: {
-          part: { include: { constraints: { include: [:constraint_part, :constraint_option] } } }
+          part: { only: [:id, :name] }  # Simplify part inclusion
         }
       }
     })
