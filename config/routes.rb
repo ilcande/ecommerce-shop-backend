@@ -41,4 +41,7 @@ Rails.application.routes.draw do
 
   # User routes
   resources :users, only: [:create, :show]
+
+  # Custom route for fetching constraints based on part IDs
+  get 'constraints', to: 'constraints#index'
 end
