@@ -44,4 +44,7 @@ Rails.application.routes.draw do
 
   # Custom route for fetching constraints based on part IDs
   get 'constraints', to: 'constraints#index'
+
+  # Custom route to checkout the cart
+  post '/checkout', to: 'orders#checkout'
 end
