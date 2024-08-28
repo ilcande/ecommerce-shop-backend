@@ -28,18 +28,33 @@ road_bike = Product.create!(
 puts "Created Products."
 
 # Create Parts
+suspension = Part.create!(name: 'Suspension', product_type: 'Bike')
 frame = Part.create!(name: 'Frame', product_type: 'Bike')
 wheels = Part.create!(name: 'Wheels', product_type: 'Bike')
-chain = Part.create!(name: 'Chain', product_type: 'Bike')
 rim_color = Part.create!(name: 'Rim Color', product_type: 'Bike')
+chain = Part.create!(name: 'Chain', product_type: 'Bike')
+frame_finish = Part.create!(name: 'Frame Finish', product_type: 'Bike')
 
 puts "Created Parts."
 
+# Create Options for Suspension
+front_suspension = Option.create!(part: suspension, name: 'Front Suspension', price: 100.00)
+rear_suspension = Option.create!(part: suspension, name: 'Rear Suspension', price: 120.00)
+full_suspension = Option.create!(part: suspension, name: 'Full Suspension', price: 130.00)
+
 # Create Options for Frame
-full_suspension = Option.create!(part: frame, name: 'Full Suspension', price: 130.00)
-diamond = Option.create!(part: frame, name: 'Diamond', price: 100.00)
-matte = Option.create!(part: frame, name: 'Matte', price: 30.00)
-shiny = Option.create!(part: frame, name: 'Shiny', price: 20.00)
+diamond = Option.create!(part: frame, name: 'Diamond', price: 150.00)
+step_through = Option.create!(part: frame, name: 'Step-through', price: 120.00)
+cantilever = Option.create!(part: frame, name: 'Cantilever', price: 110.00)
+recumbent = Option.create!(part: frame, name: 'Recumbent', price: 100.00)
+monocoque = Option.create!(part: frame, name: 'Monocoque', price: 80.00)
+
+# Create Options for Frame Finish
+shiny = Option.create!(part: frame_finish, name: 'Shiny', price: 0.0)
+matte = Option.create!(part: frame_finish, name: 'Matte', price: 0.0)
+aluminium = Option.create!(part: frame_finish, name: 'Aluminium', price: 0.0)
+carbonium = Option.create!(part: frame_finish, name: 'Carbonium', price: 0.0)
+
 
 # Create Options for Wheels
 road_wheels = Option.create!(part: wheels, name: 'Road Wheels', price: 80.00)
@@ -58,37 +73,31 @@ blue_rim = Option.create!(part: rim_color, name: 'Blue', price: 20.00)
 puts "Created Options."
 
 # Create Product Configurations
-[full_suspension, diamond, matte, shiny, road_wheels, mountain_wheels, fat_bike_wheels, single_speed_chain, eight_speed_chain].each do |option|
+# Note: For frame finishes, we'll handle the dependency in the price calculation logic
+[front_suspension, rear_suspension, full_suspension, diamond, step_through, cantilever, recumbent, monocoque, road_wheels, mountain_wheels, fat_bike_wheels, single_speed_chain, eight_speed_chain, red_rim, black_rim, blue_rim, shiny, matte, aluminium, carbonium].each do |option|
   ProductConfiguration.create!(product: bike, option: option)
   ProductConfiguration.create!(product: road_bike, option: option)
-end
-
-[rim_color].each do |part|
-  part.options.each do |option|
-    ProductConfiguration.create!(product: bike, option: option)
-    ProductConfiguration.create!(product: road_bike, option: option)
-  end
 end
 
 puts "Created Product Configurations."
 
 # Create Stock Levels
-[full_suspension, diamond, matte, shiny, road_wheels, mountain_wheels, fat_bike_wheels, single_speed_chain, eight_speed_chain, red_rim, black_rim, blue_rim].each do |option|
+[front_suspension, rear_suspension, full_suspension, diamond, step_through, cantilever, recumbent, monocoque, road_wheels, mountain_wheels, fat_bike_wheels, single_speed_chain, eight_speed_chain, red_rim, black_rim, blue_rim, shiny, matte, aluminium, carbonium].each do |option|
   StockLevel.create!(option: option, quantity: 10)
 end
 
 puts "Created Stock Levels."
 
 # Create Constraints
-# Restrict 'Mountain Wheels' to only work with 'Full Suspension' frames
+# Example Constraints
+# Note: These constraints will vary based on actual application requirements
 Constraint.create!(
   part: wheels,
   option: mountain_wheels,
-  constraint_part: frame,
+  constraint_part: suspension,
   constraint_option: full_suspension
 )
 
-# Restrict 'Fat Bike Wheels' from using 'Red' rim color
 Constraint.create!(
   part: wheels,
   option: fat_bike_wheels,
@@ -118,10 +127,12 @@ CartItem.create!(
   product: bike,
   quantity: 1,
   selections: {
-    frame: full_suspension.id,
+    suspension: full_suspension.id,
+    frame: diamond.id,
     wheels: mountain_wheels.id,
     chain: single_speed_chain.id,
-    rim_color: red_rim.id
+    rim_color: red_rim.id,
+    frame_finish: shiny.id
   }
 )
 
@@ -129,10 +140,12 @@ CartItem.create!(
   product: road_bike,
   quantity: 2,
   selections: {
-    frame: diamond.id,
+    suspension: rear_suspension.id,
+    frame: step_through.id,
     wheels: road_wheels.id,
     chain: eight_speed_chain.id,
-    rim_color: black_rim.id
+    rim_color: black_rim.id,
+    frame_finish: matte.id
   }
 )
 
