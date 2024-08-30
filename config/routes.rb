@@ -1,50 +1,36 @@
 Rails.application.routes.draw do
-  get 'pages/home'
+  # Devise routes for users
+  devise_for :users, controllers: { sessions: 'users/sessions' }
 
   # Health check route
   get "up" => "rails/health#show", as: :rails_health_check
 
   # Root path
   root 'pages#home'
+  get 'pages/home'
 
-  # Product routes
-  resources :products do
-    resources :product_configurations, only: [:index, :create]
-  end
-
-  # Part routes
-  resources :parts do
-    resources :options, only: [:index, :create, :show, :update, :destroy]
-    resources :constraints, only: [:index, :create]
-  end
-
-  # Additional routes
-  resources :options, only: [:index, :show]
-  resources :constraints, only: [:index, :show, :create, :update, :destroy]
-  resources :stock_levels, only: [:index, :show, :update]
-
-  # Cart routes
-  resources :cart_items, only: [:index, :create, :update, :destroy]
-
-  # Admin routes
+  # Admin namespace for admin-related routes
   namespace :admin do
-    resources :products, only: [:create, :update, :destroy]
-    resources :parts, only: [:create, :update, :destroy]
-    resources :options, only: [:create, :update, :destroy]
+    # Restrict admin routes to admin actions only
+    resources :products do
+      resources :product_configurations, only: [:index, :create]
+    end
+    resources :parts do
+      resources :options, only: [:index, :create, :show, :update, :destroy]
+      resources :constraints, only: [:index, :create]
+    end
+    resources :options, only: [:index, :show]
+    resources :constraints, only: [:index, :show, :create, :update, :destroy]
+    resources :stock_levels, only: [:index, :show, :update]
+    # Admin-specific cart management if needed
+    resources :cart_items, only: [:index, :create, :update, :destroy]
   end
 
-  # Authentication routes
-  namespace :auth do
-    post 'login', to: 'sessions#create'
-    delete 'logout', to: 'sessions#destroy'
-  end
-
-  # User routes
-  resources :users, only: [:create, :show]
+  # Public routes for customers
+  resources :products, only: [:index, :show] # Restrict public product actions to read-only
+  resources :cart_items, only: [:index, :create, :update, :destroy]
+  post '/checkout', to: 'orders#checkout'
 
   # Custom route for fetching constraints based on part IDs
   get 'constraints', to: 'constraints#index'
-
-  # Custom route to checkout the cart
-  post '/checkout', to: 'orders#checkout'
 end
