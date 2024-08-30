@@ -13,6 +13,8 @@ class ApplicationController < ActionController::API
   end
 
   def authenticate_admin!
-    redirect_to new_user_session_path, alert: 'You must be an admin to access this section' unless current_user&.admin?
+    unless current_user&.admin?
+      render json: { error: 'You must be an admin to access this section' }, status: :unauthorized
+    end
   end
 end

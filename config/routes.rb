@@ -11,8 +11,9 @@ Rails.application.routes.draw do
 
   # Admin namespace for admin-related routes
   namespace :admin do
-    # Restrict admin routes to admin actions only
-    resources :products do
+    resources :dashboard, only: [:index]
+
+    resources :products, only: [:create, :update, :destroy] do
       resources :product_configurations, only: [:index, :create]
     end
     resources :parts do
