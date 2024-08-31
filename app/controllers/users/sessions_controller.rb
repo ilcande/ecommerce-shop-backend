@@ -2,27 +2,14 @@ class Users::SessionsController < Devise::SessionsController
   respond_to :json
 
   def create
-    super do |resource|
-      if resource.admin?
-        # Assuming we have a method to generate a token, like Devise's 'sign_in'
-        token = current_token(resource)
-
-        if resource.persisted?
-          # Return JSON response for admin login success
-          return render json: { message: 'Welcome, Admin!', admin: true, token: token }, status: :ok
-        else
-          # Return JSON response for admin login failure
-          return render json: { error: 'Invalid email or password.' }, status: :unauthorized
-        end
-      end
-    end
+    super
   end
 
   protected
 
   def after_sign_in_path_for(resource)
     if resource.admin?
-      admin_dashboard_path
+      admin_dashboard_index_path
     else
       root_path
     end
@@ -41,10 +28,12 @@ class Users::SessionsController < Devise::SessionsController
     if resource.persisted?
       token = current_token(resource) # Ensure token is generated
       render json: {
-        message: 'Signed in successfully.',
-        admin: resource.admin?,
-        token: token
-        }, status: :ok
+      status: 'success',
+      message: 'Signed in successfully',
+      token: token,
+      admin: resource.admin?,
+      user: resource.as_json(only: [:email]) # Never include the password
+    }, status: :ok
     else
       render json: { error: 'Invalid email or password.' }, status: :unauthorized
     end

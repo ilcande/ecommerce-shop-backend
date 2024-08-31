@@ -1,2 +1,0 @@
-class ProductConfigurationsController < ApplicationController
-end
