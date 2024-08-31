@@ -13,21 +13,29 @@ Rails.application.routes.draw do
   namespace :admin do
     resources :dashboard, only: [:index]
 
-    resources :products, only: [:create, :update, :destroy] do
-      resources :product_configurations, only: [:index, :create]
+    # Allow admins to list, create, update, and destroy products
+    resources :products, only: [:index, :new, :create, :update, :destroy] do
+      resources :product_configurations, only: [:index] do
+        collection do
+          post :bulk_create
+        end
+      end
     end
-    resources :parts do
+
+    resources :parts, only: [:index, :create, :update, :destroy] do
       resources :options, only: [:index, :create, :show, :update, :destroy]
-      resources :constraints, only: [:index, :create]
+      resources :constraints, only: [:create, :update, :destroy]
     end
     resources :options, only: [:index, :show]
     resources :constraints, only: [:index, :show, :create, :update, :destroy]
     resources :stock_levels, only: [:index, :show, :update]
+
     # Admin-specific cart management if needed
     resources :cart_items, only: [:index, :create, :update, :destroy]
   end
 
   # Public routes for customers
+  resources :constraints, only: [:index]
   resources :products, only: [:index, :show] # Restrict public product actions to read-only
   resources :cart_items, only: [:index, :create, :update, :destroy]
   post '/checkout', to: 'orders#checkout'
