@@ -28,7 +28,7 @@ Rails.application.routes.draw do
     end
     resources :options, only: [:index, :show]
     resources :constraints, only: [:index, :show, :create, :update, :destroy]
-    resources :stock_levels, only: [:index, :show, :update]
+    resources :stock_levels, only: [:index, :show, :update, :create]
 
     # Admin-specific cart management if needed
     resources :cart_items, only: [:index, :create, :update, :destroy]
