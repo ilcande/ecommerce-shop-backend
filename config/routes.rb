@@ -29,15 +29,11 @@ Rails.application.routes.draw do
     resources :options, only: [:index, :show]
     resources :constraints, only: [:index, :show, :create, :update, :destroy]
     resources :stock_levels, only: [:index, :show, :update, :create]
-
-    # Admin-specific cart management if needed
-    resources :cart_items, only: [:index, :create, :update, :destroy]
   end
 
   # Public routes for customers
   resources :constraints, only: [:index]
   resources :products, only: [:index, :show] # Restrict public product actions to read-only
-  resources :cart_items, only: [:index, :create, :update, :destroy]
   post '/checkout', to: 'orders#checkout'
 
   # Custom route for fetching constraints based on part IDs

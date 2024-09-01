@@ -2,6 +2,96 @@
 
 The e-commerce application is a two-part system consisting of a backend Rails API and a [frontend React application](https://github.com/ilcande/ecommerce-shop-frontend). The backend Rails application serves as an API-only server that provides a robust and scalable interface for CRUD operations, business logic, and data management. The frontend React application, styled with Tailwind CSS, acts as the user interface through which end-users interact with the application.
 
+## Installation
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/ilcande/ecommerce-shop-backend.git
+    ```
+
+2. Change into the directory:
+
+   ```bash
+   cd ecommerce-shop-backend
+   ```
+
+3. Install dependencies:
+
+   ```bash
+    bundle install
+    ```
+
+4. Create the database:
+
+   ```bash
+   rails db:create
+   ```
+
+5. Run the migrations:
+
+   ```bash
+    rails db:migrate
+    ```
+
+6. Seed the database with sample data:
+
+   ```bash
+    rails db:seed
+    ```
+
+7. Start the Rails server:
+
+   ```bash
+    rails s
+    ```
+
+8. The Rails server should now be running at `http://localhost:3000`.
+
+## Testing
+
+To run the test suite, execute the following command:
+
+```bash
+rspec
+```
+
+## API Endpoints
+
+### Public
+
+The API provides the following main endpoints for and admin to manage products, parts, options, and configurations:
+
+- `GET /` - Retrieve the API root.
+- `GET /products` - Retrieve all products.
+- `GET /products/:id` - Retrieve a specific product.
+
+### Admin
+
+- `GET /admin/dashboard` - Retrieve the admin dashboard.
+- `POST /admin/products` - Create a new product.
+- `PATCH /admin/products/:id` - Update an existing product.
+- `DELETE /admin/products/:id` - Delete a product.
+- `POST /admin/products/:product_id/product_configurations/bulk_create` - Create multiple product configurations for a product.
+- `POST /admin/parts` - Create a new part.
+- `POST /admin/parts/:part_id/options` - Create a new option for a part.
+- `PATCH /admin/parts/:part_id/options/:id` and `PUT /admin/parts/:part_id/options/:id`  - Update an existing option for a part.
+- `POST /admin/parts/:part_id/constraints` - Create a new constraint for some options of some parts.
+- `POST /admin/stock_levels` - Create a new stock level for an option.
+- `PATCH /admin/stock_levels/:id`  and `PUT /admin/stock_levels/:id` - Update an existing stock level for an option.
+
+### Products
+
+- **GET /api/products**: Retrieve all products.
+- **GET /api/products/:id**: Retrieve a specific product.
+- **POST /api/products**: Create a new product.
+- **PATCH /api/products/:id**: Update an existing product.
+- **DELETE /api/products/:id**: Delete a product.
+
+### Parts
+
+- **GET /api/parts**: Retrieve all parts.
+
 ## Architecture Backend (Rails API)
 
 ### Technology Stack
