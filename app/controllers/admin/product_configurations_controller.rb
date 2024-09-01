@@ -7,33 +7,19 @@ module Admin
         config.permit(:part_id, :option_id)
       end
 
-      # Check for existing configurations to avoid duplicates
-      existing_option_ids = @product.product_configurations.pluck(:option_id)
+      service = Admin::ProductConfigurationService.new(product, configurations)
+      result = service.bulk_create
 
-      # Filter out configurations that are already present
-      new_configurations = configurations.reject do |config|
-        existing_option_ids.include?(config[:option_id].to_i)
-      end.map do |config|
-        @product.product_configurations.new(option_id: config[:option_id])
-      end
-
-      if new_configurations.empty?
-        render json: { message: 'No new configurations to create. All provided configurations are duplicates.' }, status: :unprocessable_entity
+      if result[:success]
+        render json: { message: result[:message] }, status: :created
       else
-        # Validate the configurations
-        if new_configurations.all?(&:valid?)
-          # Save all configurations in a single transaction
-          ActiveRecord::Base.transaction do
-            new_configurations.each(&:save!)
-          end
-          render json: { message: 'Product configurations created successfully.' }, status: :created
-        else
-          render json: { error: 'Failed to create product configurations.', details: new_configurations.map(&:errors) }, status: :unprocessable_entity
-        end
+        render json: { error: result[:error], details: result[:details] || [] }, status: :unprocessable_entity
       end
     end
 
     private
+
+    attr_reader :product
 
     def set_product
       @product = Product.find(params[:product_id])
