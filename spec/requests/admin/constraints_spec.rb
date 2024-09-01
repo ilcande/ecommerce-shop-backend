@@ -1,13 +1,20 @@
 require 'rails_helper'
 
-RSpec.describe ConstraintsController, type: :controller do
+RSpec.describe Admin::ConstraintsController, type: :controller do
+  # Include Devise test helpers for controller tests
+  include Devise::Test::ControllerHelpers
+
+  # Set up an admin user to be authenticated
+  let!(:admin_user) { User.create!(email: 'admin@example.com', password: 'password', role: 0) }
+
   let!(:part) { Part.create!(name: 'Frame', product_type: 'Bike') }
   let!(:constraint_option) { Option.create!(name: 'Full Suspension', part: part, price: 130.00, is_in_stock: true) }
   let!(:constraint) do
     Constraint.create!(
       part_id: part.id,
       constraint_part_id: part.id,
-      constraint_option_id: constraint_option.id
+      constraint_option_id: constraint_option.id,
+      option_id: constraint_option.id
     )
   end
 
@@ -15,7 +22,8 @@ RSpec.describe ConstraintsController, type: :controller do
     {
       part_id: part.id,
       constraint_part_id: part.id,
-      constraint_option_id: constraint_option.id
+      constraint_option_id: constraint_option.id,
+      option_id: constraint_option.id
     }
   end
 
@@ -23,18 +31,14 @@ RSpec.describe ConstraintsController, type: :controller do
     {
       part_id: nil,
       constraint_part_id: nil,
-      constraint_option_id: nil
+      constraint_option_id: nil,
+      option_id: nil
     }
   end
 
-  describe 'GET #index' do
-    it 'returns a list of constraints' do
-      get :index
-      expect(response).to have_http_status(:success)
-      expect(response.content_type).to include('application/json')
-      expect(JSON.parse(response.body).size).to eq(1)
-      expect(JSON.parse(response.body).first['part_id']).to eq(part.id)
-    end
+  # Authenticate the admin user before each test
+  before do
+    sign_in admin_user
   end
 
   describe 'GET #show' do

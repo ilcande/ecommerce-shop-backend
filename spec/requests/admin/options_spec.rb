@@ -1,10 +1,18 @@
 require 'rails_helper'
 
-RSpec.describe OptionsController, type: :controller do
+RSpec.describe Admin::OptionsController, type: :controller do
+  include Devise::Test::ControllerHelpers
+
+  let!(:admin_user) { User.create!(email: 'admin@example.com', password: 'password', role: 0) }
   let!(:part) { Part.create!(name: 'Frame', product_type: 'Bike') }
   let!(:option) { Option.create!(name: 'Full Suspension', part: part, price: 130.00, is_in_stock: true) }
+
   let(:valid_attributes) { { name: 'New Option', price: 150.00, is_in_stock: true, part_id: part.id } }
-  let(:invalid_attributes) { { name: '', price: -10.00, is_in_stock: true } }
+  let(:invalid_attributes) { { name: '', price: -10.00, is_in_stock: true, part_id: part.id } }
+
+  before do
+    sign_in admin_user
+  end
 
   describe 'GET #index' do
     it 'returns a list of options for a specific part' do
@@ -18,7 +26,7 @@ RSpec.describe OptionsController, type: :controller do
 
   describe 'GET #show' do
     it 'returns a specific option' do
-      get :show, params: { id: option.id }
+      get :show, params: { part_id: part.id, id: option.id }
       expect(response).to have_http_status(:success)
       expect(response.content_type).to include('application/json')
       json_response = JSON.parse(response.body)

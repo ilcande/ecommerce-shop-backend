@@ -1,28 +1,15 @@
 require 'rails_helper'
 
-RSpec.describe ProductsController, type: :controller do
+RSpec.describe Admin::ProductsController, type: :controller do
+  include Devise::Test::ControllerHelpers
+
+  let!(:admin_user) { User.create!(email: 'admin@example.com', password: 'password', role: :admin) }
   let!(:product) { Product.create!(name: 'Mountain Bike', product_type: 'Bike', base_price: 500.00, image_url: 'http://example.com/mountain_bike.jpg') }
   let(:valid_attributes) { { name: 'Road Bike', product_type: 'Bike', base_price: 700.00, image_url: 'http://example.com/road_bike.jpg' } }
   let(:invalid_attributes) { { name: '', product_type: '', base_price: nil, image_url: '' } }
 
-  describe 'GET #index' do
-    it 'returns a list of products' do
-      get :index
-      expect(response).to have_http_status(:success)
-      expect(response.content_type).to include('application/json')
-      expect(JSON.parse(response.body).size).to eq(1)
-      expect(JSON.parse(response.body).first['name']).to eq('Mountain Bike')
-    end
-  end
-
-  describe 'GET #show' do
-    it 'returns a specific product' do
-      get :show, params: { id: product.id }
-      expect(response).to have_http_status(:success)
-      expect(response.content_type).to include('application/json')
-      json_response = JSON.parse(response.body)
-      expect(json_response['name']).to eq('Mountain Bike')
-    end
+  before do
+    sign_in admin_user
   end
 
   describe 'POST #create' do

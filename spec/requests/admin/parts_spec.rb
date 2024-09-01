@@ -1,9 +1,16 @@
 require 'rails_helper'
 
-RSpec.describe PartsController, type: :controller do
+RSpec.describe Admin::PartsController, type: :controller do
+  include Devise::Test::ControllerHelpers
+
+  let!(:admin_user) { User.create!(email: 'admin@example.com', password: 'password', role: 0) }
   let!(:part) { Part.create!(name: 'Frame', product_type: 'Bike') }
   let(:valid_attributes) { { name: 'Wheels', product_type: 'Bike' } }
   let(:invalid_attributes) { { name: '', product_type: '' } }
+
+  before do
+    sign_in admin_user
+  end
 
   describe 'GET #index' do
     it 'returns a list of parts' do

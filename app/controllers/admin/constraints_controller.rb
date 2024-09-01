@@ -9,7 +9,6 @@ module Admin
 
     # POST /constraints
     def create
-      binding.pry
       @constraint = Constraint.new(constraint_params)
       if @constraint.save
         render json: @constraint, status: :created

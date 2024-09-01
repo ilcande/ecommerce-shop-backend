@@ -22,7 +22,7 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :parts, only: [:index, :create, :update, :destroy] do
+    resources :parts, only: [:index, :show, :create, :update, :destroy] do
       resources :options, only: [:index, :create, :show, :update, :destroy]
       resources :constraints, only: [:create, :update, :destroy]
     end
