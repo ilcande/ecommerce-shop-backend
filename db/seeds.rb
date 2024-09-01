@@ -7,6 +7,7 @@ Constraint.destroy_all
 Option.destroy_all
 Part.destroy_all
 Product.destroy_all
+User.destroy_all
 
 puts "Cleared existing records."
 
@@ -18,11 +19,25 @@ bike = Product.create!(
   image_url: 'https://images.pexels.com/photos/100582/pexels-photo-100582.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
 )
 
-road_bike = Product.create!(
+bike_two = Product.create!(
   name: 'Road Bike',
   product_type: 'Bike',
   base_price: 700.00,
-  image_url: 'https://images.pexels.com/photos/26555452/pexels-photo-26555452/free-photo-of-road-bike-near-wall.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
+  image_url: 'https://images.pexels.com/photos/255934/pexels-photo-255934.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
+)
+
+bike_three = Product.create!(
+  name: 'Fat Bike',
+  product_type: 'Bike',
+  base_price: 900.00,
+  image_url: 'https://images.pexels.com/photos/1616566/pexels-photo-1616566.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
+)
+
+bike_four = Product.create!(
+  name: 'Hybrid Bike',
+  product_type: 'Bike',
+  base_price: 600.00,
+  image_url: 'https://images.pexels.com/photos/276517/pexels-photo-276517.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
 )
 
 puts "Created Products."
@@ -76,7 +91,9 @@ puts "Created Options."
 # Note: For frame finishes, we'll handle the dependency in the price calculation logic
 [front_suspension, rear_suspension, full_suspension, diamond, step_through, cantilever, recumbent, monocoque, road_wheels, mountain_wheels, fat_bike_wheels, single_speed_chain, eight_speed_chain, red_rim, black_rim, blue_rim, shiny, matte, aluminium, carbonium].each do |option|
   ProductConfiguration.create!(product: bike, option: option)
-  ProductConfiguration.create!(product: road_bike, option: option)
+  ProductConfiguration.create!(product: bike_two, option: option)
+  ProductConfiguration.create!(product: bike_three, option: option)
+  ProductConfiguration.create!(product: bike_four, option: option)
 end
 
 puts "Created Product Configurations."
@@ -107,46 +124,10 @@ Constraint.create!(
 
 puts "Created Constraints."
 
-# Create Price Modifiers
-PriceModifier.create!(
-  product: bike,
-  modifier_amount: 50.00,
-  description: 'Price modifier for Full Suspension Frame'
+# Create Admin User
+# Note: For simplicity, we'll create a single admin user
+User.create!(
+  email: 'admin@example.com',
+  password: 'password123',
+  password_confirmation: 'password123'
 )
-
-PriceModifier.create!(
-  product: road_bike,
-  modifier_amount: 40.00,
-  description: 'Price modifier for Diamond Frame'
-)
-
-puts "Created Price Modifiers."
-
-# Create Cart Items (for testing purposes)
-CartItem.create!(
-  product: bike,
-  quantity: 1,
-  selections: {
-    suspension: full_suspension.id,
-    frame: diamond.id,
-    wheels: mountain_wheels.id,
-    chain: single_speed_chain.id,
-    rim_color: red_rim.id,
-    frame_finish: shiny.id
-  }
-)
-
-CartItem.create!(
-  product: road_bike,
-  quantity: 2,
-  selections: {
-    suspension: rear_suspension.id,
-    frame: step_through.id,
-    wheels: road_wheels.id,
-    chain: eight_speed_chain.id,
-    rim_color: black_rim.id,
-    frame_finish: matte.id
-  }
-)
-
-puts "Created Cart Items."

@@ -10,18 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_08_30_125759) do
+ActiveRecord::Schema[7.1].define(version: 2024_09_01_183945) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-
-  create_table "cart_items", force: :cascade do |t|
-    t.bigint "product_id", null: false
-    t.integer "quantity", default: 1, null: false
-    t.json "selections", default: {}
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["product_id"], name: "index_cart_items_on_product_id"
-  end
 
   create_table "constraints", force: :cascade do |t|
     t.bigint "part_id", null: false
@@ -51,24 +42,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_30_125759) do
     t.string "product_type", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-  end
-
-  create_table "price_modifier_conditions", force: :cascade do |t|
-    t.bigint "price_modifier_id", null: false
-    t.bigint "option_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["option_id"], name: "index_price_modifier_conditions_on_option_id"
-    t.index ["price_modifier_id"], name: "index_price_modifier_conditions_on_price_modifier_id"
-  end
-
-  create_table "price_modifiers", force: :cascade do |t|
-    t.bigint "product_id", null: false
-    t.decimal "modifier_amount", precision: 10, scale: 2, null: false
-    t.string "description"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["product_id"], name: "index_price_modifiers_on_product_id"
   end
 
   create_table "product_configurations", force: :cascade do |t|
@@ -111,15 +84,11 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_30_125759) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
-  add_foreign_key "cart_items", "products"
   add_foreign_key "constraints", "options"
   add_foreign_key "constraints", "options", column: "constraint_option_id"
   add_foreign_key "constraints", "parts"
   add_foreign_key "constraints", "parts", column: "constraint_part_id"
   add_foreign_key "options", "parts"
-  add_foreign_key "price_modifier_conditions", "options"
-  add_foreign_key "price_modifier_conditions", "price_modifiers"
-  add_foreign_key "price_modifiers", "products"
   add_foreign_key "product_configurations", "options"
   add_foreign_key "product_configurations", "products"
   add_foreign_key "stock_levels", "options"
