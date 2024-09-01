@@ -1,6 +1,6 @@
 module Admin
   class ProductsController < ApplicationController
-    before_action :set_product, only: [:update, :destroy, :check_constraints_and_update_price]
+    before_action :set_product, only: [:update, :destroy]
     before_action :authenticate_user!, only: [:create, :update, :destroy, :new]  # Ensure user is authenticated for these actions
     before_action :authorize_admin!, only: [:create, :update, :destroy, :new]    # Ensure only admins can access these actions
 
@@ -35,20 +35,14 @@ module Admin
       head :no_content
     end
 
-    # Custom action to handle constraints and dynamic pricing - TODO refactor/move
-    # POST /products/:id/check_constraints_and_update_price
-    def check_constraints_and_update_price
-      selected_options = params[:selected_options] || {}
-
-      available_options, price = calculate_available_options_and_price(selected_options)
-
-      render json: { available_options: available_options, price: price }
-    end
-
     private
 
+    def set_product
+      @product = Product.includes(options: { part: :constraints }).find(params[:id])
+    end
+
     def product_params
-      params.require(:product).permit(:name, :product_type, :base_price, :image_url)
+      params.require(:product).permit(:name, :product_type, :base_price, :image_url, options_attributes: [:id, :name, :price])
     end
 
     # Check if the user is an admin

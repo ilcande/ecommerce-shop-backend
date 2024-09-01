@@ -5,7 +5,7 @@ module Admin
     def bulk_create
       # Ensure configurations come through as expected, only permitting option_id
       configurations = params.require(:configurations).map do |config|
-        config.permit(:option_id) # Only need option_id since part_id is not relevant here
+        config.permit(:part_id, :option_id)
       end
 
       # Build the configurations to be saved
