@@ -58,9 +58,9 @@ rspec
 
 ## API Endpoints
 
-### Public
+The API provides the following main endpoints for and admin to manage products, parts, options, and configurations and for users to browse and view products.
 
-The API provides the following main endpoints for and admin to manage products, parts, options, and configurations:
+### Public
 
 - `GET /` - Retrieve the API root.
 - `GET /products` - Retrieve all products.
@@ -79,18 +79,6 @@ The API provides the following main endpoints for and admin to manage products, 
 - `POST /admin/parts/:part_id/constraints` - Create a new constraint for some options of some parts.
 - `POST /admin/stock_levels` - Create a new stock level for an option.
 - `PATCH /admin/stock_levels/:id`  and `PUT /admin/stock_levels/:id` - Update an existing stock level for an option.
-
-### Products
-
-- **GET /api/products**: Retrieve all products.
-- **GET /api/products/:id**: Retrieve a specific product.
-- **POST /api/products**: Create a new product.
-- **PATCH /api/products/:id**: Update an existing product.
-- **DELETE /api/products/:id**: Delete a product.
-
-### Parts
-
-- **GET /api/parts**: Retrieve all parts.
 
 ## Architecture Backend (Rails API)
 
