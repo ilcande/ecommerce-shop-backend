@@ -1,6 +1,4 @@
 # Clear existing records in a safe order
-CartItem.destroy_all
-PriceModifier.destroy_all
 ProductConfiguration.destroy_all
 StockLevel.destroy_all
 Constraint.destroy_all
